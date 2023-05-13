@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="MVVM\ViewModel\RegisterView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MVVM\ViewModel\LoginView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MVVM\ViewModel\StudentPanelView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MVVM\ViewModel\ProfessorPanelView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MVVM\View\LoginView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\View\ProfessorPanelView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\View\RegisterView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\View\StudentPanelView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

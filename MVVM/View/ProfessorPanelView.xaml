@@ -1,0 +1,49 @@
+﻿<Window x:Class="StudentManagementSystem.MVVM.ViewModel.ProfessorPanelView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True"
+        Title="ProfessorPanelView" Height="800" Width="1600">
+
+
+    <Border CornerRadius="50" BorderThickness="10" Background="#14213D">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition Height="60"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="25"></ColumnDefinition>
+                <ColumnDefinition Width="25"></ColumnDefinition>
+                <ColumnDefinition Width="25"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Management Panel" 
+                       Foreground="#9AD1D4" 
+                       FontSize="20" 
+                       FontFamily="Georgia" 
+                       Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+            ></TextBlock>
+
+            <Button Name="Minimalize" Grid.Column="1" Content="&#x1F5D5;" Click="Minimalize_Click"></Button>
+            <Button Name="Fullscreen" Grid.Column="2" Content="&#x26F6;" Click="Fullscreen_Click"></Button>
+            <Button Name="Close" Grid.Column="3" Content="&#10006;" Click="Close_Click"></Button>
+
+        </Grid>
+
+    </Border>
+
+</Window>
