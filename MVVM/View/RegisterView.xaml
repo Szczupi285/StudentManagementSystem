@@ -50,6 +50,9 @@
             <Button Name="Fullscreen" Grid.Column="2" Content="&#x26F6;" Click="Fullscreen_Click"></Button>
             <Button Name="Close" Grid.Column="3" Content="&#10006;" Click="Close_Click"></Button>
 
+            
+            
+
             <TextBlock Grid.Column="0" 
                        Grid.Row="6" 
                        HorizontalAlignment="Center" 
@@ -86,6 +89,7 @@
                 FontFamily="Georgia" 
                 Foreground="#9AD1D4" 
                 FontSize="30"
+                Click="StudentRegister_Click"
                 ></Button>
 
             <Button 
@@ -138,9 +142,23 @@
                      Height="50"
                      FontSize="20px"
                      VerticalContentAlignment="Center"
+                     TextChanged="StudentLogin_TextChanged"
                        ></TextBox>
-            
-            
+
+            <TextBlock 
+                       Name="StudentLoginPopup"
+                       Grid.Column="0" 
+                       Grid.Row="3" 
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Top"
+                       Margin="250,20,0,0"
+                       FontFamily="Georgia" 
+                       Foreground="#9AD1D4" 
+                       FontSize="14"
+                       Visibility="Hidden"
+                       >Login must be between 5 and 51 characters</TextBlock>
+
+
             <TextBlock Grid.Column="0" 
                        Grid.Row="4" 
                        HorizontalAlignment="Left" 
@@ -150,8 +168,10 @@
                        Foreground="#9AD1D4" 
                        FontSize="20"
                        >Password</TextBlock>
+            
+            
 
-            <TextBox Name="StudentPassword"
+            <PasswordBox Name="StudentPassword"
                      Grid.Column="0" 
                      Grid.Row="5" 
                      HorizontalAlignment="Left" 
@@ -166,7 +186,24 @@
                      Height="50"
                      FontSize="20px"
                      VerticalContentAlignment="Center"
-                       ></TextBox>
+                     PasswordChanged="StudentPassword_TextChanged"
+                       ></PasswordBox>
+
+            <TextBlock 
+                       Name="StudentPasswordPopup"
+                       Grid.Column="0" 
+                       Grid.Row="5" 
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Top"
+                       Margin="250,0,0,0"
+                       FontFamily="Georgia" 
+                       Foreground="#9AD1D4" 
+                       FontSize="14"
+                       Visibility="Hidden"
+                       ></TextBlock>
+
+
+
 
             <TextBlock Grid.Column="0" 
                        Grid.Row="6" 
@@ -249,8 +286,22 @@
                      Height="50"
                      FontSize="20px"
                      VerticalContentAlignment="Center"
+                     TextChanged="StudentEmail_TextChanged"
                        ></TextBox>
-            
+
+            <TextBlock 
+                       Name="StudentEmailPopup"
+                       Grid.Column="0" 
+                       Grid.Row="11" 
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Top"
+                       Margin="250,10,0,0"
+                       FontFamily="Georgia" 
+                       Foreground="#9AD1D4" 
+                       FontSize="14"
+                       Visibility="Hidden"
+                       >Email Must be in a proper format</TextBlock>
+
 
             <TextBlock Grid.Column="0" 
                        Grid.Row="12" 
@@ -263,6 +314,7 @@
                        >PhoneNumber*</TextBlock>
             
             <TextBox Name="StudentPhoneNumber"
+                     PreviewTextInput="StudentPhoneNumber_PreviewTextInput"
                      Grid.Column="0" 
                      Grid.Row="13" 
                      HorizontalAlignment="Left" 
@@ -277,8 +329,35 @@
                      Height="50"
                      FontSize="20px"
                      VerticalContentAlignment="Center"
+                     TextChanged="StudentPhoneNumber_TextChanged"
                        ></TextBox>
-            
+
+            <TextBlock 
+                       Name="StudentPhoneNumberPopup"
+                       Grid.Column="0" 
+                       Grid.Row="13" 
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Top"
+                       Margin="250,10,0,0"
+                       FontFamily="Georgia" 
+                       Foreground="#9AD1D4" 
+                       FontSize="14"
+                       Visibility="Hidden"
+                       >PhoneNumber must be exactly 9 digits</TextBlock>
+
+            <TextBlock 
+                       Name="FailedRegisterPopup"
+                       Grid.Column="0" 
+                       Grid.Row="14" 
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Top"
+                       Margin="250,10,0,0"
+                       FontFamily="Georgia" 
+                       Foreground="Red" 
+                       FontSize="25"
+                       Visibility="Hidden"
+                       ></TextBlock>
+
 
 
 
@@ -306,7 +385,7 @@
                     FontSize="20"
                     >Login</TextBlock>
             
-            <TextBox Name="ProfesorLogin"
+            <TextBox Name="ProfessorLogin"
                      Grid.Column="0" 
                      Grid.Row="3" 
                      HorizontalAlignment="Right" 
@@ -334,7 +413,7 @@
                     FontSize="20"
                     >Password</TextBlock>
             
-            <TextBox Name="ProfesorPassword"
+            <TextBox Name="ProfessorPassword"
                      Grid.Column="0" 
                      Grid.Row="5" 
                      HorizontalAlignment="Right" 
@@ -362,7 +441,7 @@
                     FontSize="20"
                     >Name</TextBlock>
 
-            <TextBox Name="ProfesorName"
+            <TextBox Name="ProfessorName"
                      Grid.Column="0" 
                      Grid.Row="7" 
                      HorizontalAlignment="Right" 
@@ -390,7 +469,7 @@
                     FontSize="20"
                     >Surname</TextBlock>
 
-            <TextBox Name="ProfesorSurname"
+            <TextBox Name="ProfessorSurname"
                      Grid.Column="0" 
                      Grid.Row="9" 
                      HorizontalAlignment="Right" 
@@ -418,7 +497,7 @@
                     FontSize="20"
                     >Title*</TextBlock>
 
-            <TextBox Name="ProfesorTitle"
+            <TextBox Name="ProfessorTitle"
                      Grid.Column="0" 
                      Grid.Row="11" 
                      HorizontalAlignment="Right" 
@@ -446,7 +525,7 @@
                     FontSize="20"
                     >E-Mail*</TextBlock>
 
-            <TextBox Name="ProfesorEmail"
+            <TextBox Name="ProfessorEmail"
                      Grid.Column="0" 
                      Grid.Row="13" 
                      HorizontalAlignment="Right" 
@@ -474,7 +553,8 @@
                     FontSize="20"
                     >PhoneNumber*</TextBlock>
             
-            <TextBox Name="ProfesorPhoneNumber"
+            <TextBox Name="ProfessorPhoneNumber"
+                     PreviewTextInput="ProfessorPhoneNumber_PreviewTextInput"
                      Grid.Column="0" 
                      Grid.Row="15" 
                      HorizontalAlignment="Right" 

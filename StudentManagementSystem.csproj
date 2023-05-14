@@ -27,8 +27,4 @@
     <None Include="E:\repository\StudentManagementSystem\StudentManagementSystem\.editorconfig" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="MVVM\Model\" />
-  </ItemGroup>
-
 </Project>
