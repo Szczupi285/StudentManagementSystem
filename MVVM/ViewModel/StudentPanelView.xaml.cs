@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StudentManagementSystem.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
     /// </summary>
     public partial class StudentPanelView : Window
     {
-        public StudentPanelView()
+        public StudentPanelView(Users user)
         {
             InitializeComponent();
         }

@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using StudentManagementSystem.MVVM.Model;
 using System.Text.RegularExpressions;
+using Microsoft.IdentityModel.Tokens;
 
 namespace StudentManagementSystem.MVVM.ViewModel
 {
@@ -249,7 +250,8 @@ namespace StudentManagementSystem.MVVM.ViewModel
 
                     // validation methods
                     if (SecurityMethods.IsValidLogin(data[0]) && SecurityMethods.IsValidPassword(data[1])
-                        && SecurityMethods.IsValidEmail(data[4]) && SecurityMethods.IsValidPhoneNumber(data[5])
+                        && (SecurityMethods.IsValidEmail(data[4]) || data[4].IsNullOrEmpty()) 
+                        && (SecurityMethods.IsValidPhoneNumber(data[5]) || data[5].IsNullOrEmpty())
                         && DoesPhoneNumberExist == null && DoesEmailExist == null && DoesLoginExist == null)
                     {
                         var Student = new Students
@@ -340,7 +342,8 @@ namespace StudentManagementSystem.MVVM.ViewModel
 
                     // validation methods
                     if (SecurityMethods.IsValidLogin(data[0]) && SecurityMethods.IsValidPassword(data[1])
-                        && SecurityMethods.IsValidEmail(data[4]) && SecurityMethods.IsValidPhoneNumber(data[5])
+                        && (SecurityMethods.IsValidEmail(data[4]) || data[4].IsNullOrEmpty())
+                        && (SecurityMethods.IsValidPhoneNumber(data[5]) || data[5].IsNullOrEmpty())
                         && DoesPhoneNumberExist == null && DoesEmailExist == null && DoesLoginExist == null)
                     {
 
