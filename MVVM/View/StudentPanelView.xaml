@@ -13,11 +13,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="60"></RowDefinition>
-                <RowDefinition Height="60"></RowDefinition>
-                <RowDefinition Height="60"></RowDefinition>
-                <RowDefinition Height="60"></RowDefinition>
-                <RowDefinition Height="60"></RowDefinition>
-                <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
@@ -39,6 +35,47 @@
             <Button Name="Minimalize" Grid.Column="1" Content="&#x1F5D5;" Click="Minimalize_Click"></Button>
             <Button Name="Fullscreen" Grid.Column="2" Content="&#x26F6;" Click="Fullscreen_Click"></Button>
             <Button Name="Close" Grid.Column="3" Content="&#10006;" Click="Close_Click"></Button>
+
+            <Button Name="Schedule" 
+                    Grid.Column="0" 
+                    Grid.Row="1" 
+                    Content="Schedule" 
+                    Width="250"
+                    FontSize="20" 
+                    Foreground="#9AD1D4"
+                    Background="Transparent"
+                    HorizontalAlignment="Left"
+                    Click="Schedule_Click"
+                    ></Button>
+
+            <Button Name="Grades" 
+                    Grid.Column="0" 
+                    Grid.Row="1" 
+                    Content="Grades" 
+                    Width="250"
+                    FontSize="20" 
+                    Foreground="#9AD1D4"
+                    Background="Transparent"
+                    HorizontalAlignment="Center"
+                    Click="Grades_Click"
+                    ></Button>
+
+            <Button Name="Courses" 
+                    Grid.Column="0" 
+                    Grid.Row="1" 
+                    Content="Courses" 
+                    Width="250"
+                    FontSize="20" 
+                    Foreground="#9AD1D4"
+                    Background="Transparent"
+                    HorizontalAlignment="Right"
+                    Click="Courses_Click"
+                    ></Button>
+
+            <ScrollViewer Name ="Info" Grid.Column="0" Grid.Row="2" Height="680" >
+                <Grid Name="Container"></Grid>
+            </ScrollViewer>
+
 
         </Grid>
 

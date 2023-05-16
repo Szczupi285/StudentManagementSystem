@@ -1,4 +1,5 @@
-﻿using StudentManagementSystem.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using StudentManagementSystem.Data;
 using StudentManagementSystem.MVVM.Model;
 using System;
 using System.Collections.Generic;
@@ -64,8 +65,8 @@ namespace StudentManagementSystem.MVVM.ViewModel
                 using (var context = new StudentManagementSystemContext())
                 {
                     var HashedPassword = SecurityMethods.HashSha256(Password.Text);
-                    var user = context.Users.FirstOrDefault(Users => Users.Login == Login.Text && Users.Password == HashedPassword);
-                    
+                    var user = context.Users.Include(x => x.Professor).Include(x => x.Student).FirstOrDefault(Users => Users.Login == Login.Text && Users.Password == HashedPassword);
+
 
 
                     if (user == null)

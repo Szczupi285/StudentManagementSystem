@@ -20,9 +20,11 @@ namespace StudentManagementSystem.MVVM.ViewModel
     /// </summary>
     public partial class StudentPanelView : Window
     {
+        private Users User { get; init; }
         public StudentPanelView(Users user)
         {
             InitializeComponent();
+            this.User = user;
         }
 
         private void Minimalize_Click(object sender, RoutedEventArgs e)
@@ -42,5 +44,21 @@ namespace StudentManagementSystem.MVVM.ViewModel
         {
             Application.Current.Shutdown();
         }
+
+        private void Schedule_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Grades_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Courses_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 }
