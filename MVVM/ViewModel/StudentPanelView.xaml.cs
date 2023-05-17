@@ -86,7 +86,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
                             frame.Margin = new Thickness(10);
                             frame.BorderThickness = new Thickness(3);
 
-
+                            iterator++;
                             // move frame to next row within the grid 
                             Grid.SetRow(frame, iterator);
                             iterator++;
