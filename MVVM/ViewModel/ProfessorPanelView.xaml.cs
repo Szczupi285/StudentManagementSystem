@@ -1,4 +1,6 @@
-﻿using StudentManagementSystem.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using StudentManagementSystem.Data;
+using StudentManagementSystem.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +55,9 @@ namespace StudentManagementSystem.MVVM.ViewModel
 
         private void Grades_Click(object sender, RoutedEventArgs e)
         {
+            
 
+            
         }
 
         private void Courses_Click(object sender, RoutedEventArgs e)

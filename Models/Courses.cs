@@ -10,6 +10,8 @@ namespace StudentManagementSystem.Models
     {
         public int Id { get; set; }
 
+        public string CourseName { get; set; } = null!;
+
         public Professors Profesor { get; set; } = null!;
 
         public ICollection<Students> Students { get; set; } = null!;

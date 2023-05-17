@@ -10,9 +10,13 @@ namespace StudentManagementSystem.Models
     {
         public int Id { get; set; }
 
+        public int Grade { get; set; }
+
         public Students Student { get; set; } = null!;
 
         public Professors Professor { get; set; } = null!;
+
+        public Courses Courses { get; set; } = null!;
 
 
 
