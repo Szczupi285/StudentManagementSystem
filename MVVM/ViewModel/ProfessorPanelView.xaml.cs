@@ -106,13 +106,15 @@ namespace StudentManagementSystem.MVVM.ViewModel
         private void Courses_Click(object sender, RoutedEventArgs e)
         {
             int iterator = 0;
+            int studentCounter = 1;
             Container.Children.Clear();
             // gets the current user professorID
             var ProfesorId = User.Professor?.Id;
-/*
+
             using (var context = new StudentManagementSystemContext())
             {
-                foreach(var course in context.Courses.Include(s => s.Students).Include(p => p.Profesor))
+
+                foreach(var course in context.Courses.Include(p => p.Profesor).Include(sc => sc.StudentCourses)!.ThenInclude(s => s.Student))
                 {
                     if(course.Profesor.Id == ProfesorId)
                     {
@@ -121,36 +123,36 @@ namespace StudentManagementSystem.MVVM.ViewModel
                         rowDef.Height = new GridLength(1, GridUnitType.Auto);
                         Container.RowDefinitions.Add(rowDef);
 
-                        // creates textblock and appent the coursename to it only once
+                        // creates textblock and append the coursename to it only once
                         TextBlock GrdCrs = new TextBlock();
                         GrdCrs.Text = $" CourseName: {course.CourseName}";
                         GrdCrs.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
                         GrdCrs.FontSize = 20;
-                        GrdCrs.Padding = new Thickness(5);
 
-
+                        // gets every student in course and adds them to textblock
+                        foreach (var student in course.StudentCourses!)
+                        {
+                            // appent studentName for every student existing in that course
+                            GrdCrs.Text += $"\n Student {studentCounter}: {student.Student.Name} {student.Student.Surname}";
+                            studentCounter++;
+                        }
+                        studentCounter = 1;
                         Frame frame = new Frame();
                         frame.Content = GrdCrs;
                         frame.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
                         frame.Margin = new Thickness(10);
                         frame.BorderThickness = new Thickness(3);
-                        
-                        foreach (var student in course.Students)
-                        {
-                            // appent studentName for every student existing in that course
-                             GrdCrs.Text += $"\n Student: {student.Name} {student.Surname}";
 
-                        }
+
                         // move frame to next row within the grid 
                         Grid.SetRow(frame, iterator);
                         iterator++;
                         Container.Children.Add(frame);
-
-
                     }
                 }
+               
             }
-*/
+
 
 
         }

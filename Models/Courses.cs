@@ -14,6 +14,7 @@ namespace StudentManagementSystem.Models
 
         public Professors Profesor { get; set; } = null!;
 
+        // think about nullability in this one
         public ICollection<StudentCourses>? StudentCourses { get; set; } 
 
         public ICollection<Grades>? Grades { get; set; }
