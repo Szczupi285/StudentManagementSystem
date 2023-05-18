@@ -159,15 +159,14 @@ namespace StudentManagementSystem.MVVM.ViewModel
 
                 int? UserStudId = User.Student?.Id;
 
-             /*   var Courses = context.Courses.Include(s => s.Students).Include(p => p.Profesor);
+                var Courses = context.StudentCourses.Include(s => s.Student).Include(c => c.Course).ThenInclude(p => p.Profesor);
                 int iterator = 0;
 
 
-                foreach (var course in Courses)
+                foreach (var StudentCourse in Courses)
                 {
-                    foreach(var student in course.Students)
-                    {
-                        if(student.Id == UserStudId)
+                    
+                        if(StudentCourse.Student.Id == UserStudId)
                         {
 
                             // created row definition
@@ -177,7 +176,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
 
                             // creates textblock containing Grade Data
                             TextBlock GrdCrs = new TextBlock();
-                            GrdCrs.Text = $" Course name: {course.CourseName}\n Professor: {course.Profesor.Name}";
+                            GrdCrs.Text = $" Course name: {StudentCourse.Course.CourseName}\n Professor: {StudentCourse.Course.Profesor.Name}";
                             GrdCrs.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
                             GrdCrs.FontSize = 20;
                             GrdCrs.Padding = new Thickness(5);
@@ -196,9 +195,9 @@ namespace StudentManagementSystem.MVVM.ViewModel
                             Container.Children.Add(frame);
 
                         }
-                    }
+                    
                 }
-             */
+             
             }
         }
 
