@@ -109,7 +109,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
             Container.Children.Clear();
             // gets the current user professorID
             var ProfesorId = User.Professor?.Id;
-
+/*
             using (var context = new StudentManagementSystemContext())
             {
                 foreach(var course in context.Courses.Include(s => s.Students).Include(p => p.Profesor))
@@ -150,7 +150,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
                     }
                 }
             }
-
+*/
 
 
         }

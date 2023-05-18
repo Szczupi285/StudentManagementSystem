@@ -17,6 +17,7 @@ namespace StudentManagementSystem.Data
         public DbSet<Courses> Courses { get; set; } = null!;
         public DbSet<Schedule> Schedules { get; set; } = null!;
         public DbSet<Users> Users { get; set; } = null!;  
+        public DbSet<StudentCourses> StudentCourses { get; set; } = null!;  
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

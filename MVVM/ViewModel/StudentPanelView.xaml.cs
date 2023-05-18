@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -58,43 +59,49 @@ namespace StudentManagementSystem.MVVM.ViewModel
                 int? UserStudId = User.Student?.Id;
                 int iterator = 0;
 
-                foreach (var studSchedule in context.Schedules.Include(c => c.Course).ThenInclude(s => s.Students))
+                
+                HashSet<int> courseId = new HashSet<int>();
+               
+                foreach(var sc in context.StudentCourses.Include(s => s.Student).Include(s => s.Course))
                 {
-                    foreach(var student in studSchedule.Course.Students)
+                    if(sc.Student.Id == UserStudId)
                     {
-                        
-                        if (student.Id == UserStudId)
-                        {
-
-                            // created row definition
-                            RowDefinition rowDef = new RowDefinition();
-                            rowDef.Height = new GridLength(1, GridUnitType.Auto);
-                            Container.RowDefinitions.Add(rowDef);
-
-                            // creates textblock containing Grade Data
-                            TextBlock GrdCrs = new TextBlock();
-                            GrdCrs.Text = $" Course Name: {studSchedule.Course.CourseName} \n" +
-                                $" Start Date: {studSchedule.StartDate}\n End Date: {studSchedule.EndDate}";
-                            GrdCrs.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
-                            GrdCrs.FontSize = 20;
-                            GrdCrs.Padding = new Thickness(5);
-
-
-                            Frame frame = new Frame();
-                            frame.Content = GrdCrs;
-                            frame.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
-                            frame.Margin = new Thickness(10);
-                            frame.BorderThickness = new Thickness(3);
-
-                            iterator++;
-                            // move frame to next row within the grid 
-                            Grid.SetRow(frame, iterator);
-                            iterator++;
-                            Container.Children.Add(frame);
-
-                        }
+                        courseId.Add(sc.Course.Id);                          
                     }
                 }
+
+                foreach (var schedule in context.Schedules.Include(c => c.Course))
+                {
+                    if (courseId.Contains(schedule.Course.Id))
+                    {
+                        // created row definition
+                        RowDefinition rowDef = new RowDefinition();
+                        rowDef.Height = new GridLength(1, GridUnitType.Auto);
+                        Container.RowDefinitions.Add(rowDef);
+
+                        // creates textblock containing Grade Data
+                        TextBlock GrdCrs = new TextBlock();
+                        GrdCrs.Text = $" Course Name: {schedule.Course.CourseName} \n" +
+                            $" Start Date: {schedule.StartDate}\n End Date: {schedule.EndDate}";
+                        GrdCrs.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+                        GrdCrs.FontSize = 20;
+                        GrdCrs.Padding = new Thickness(5);
+
+
+                        Frame frame = new Frame();
+                        frame.Content = GrdCrs;
+                        frame.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
+                        frame.Margin = new Thickness(10);
+                        frame.BorderThickness = new Thickness(3);
+
+                        // move frame to next row within the grid 
+                        Grid.SetRow(frame, iterator);
+                        iterator++;
+                        Container.Children.Add(frame);
+
+                    }
+                }
+
             }
         }
 
@@ -109,7 +116,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
 
                 int iterator = 0;
 
-                foreach (var grade in context.Grades.Include(s => s.Student).Include(c => c.Courses).Include(p => p.Professor))
+                foreach (var grade in context.Grades.Include(s => s.Student).Include(c => c.Course).ThenInclude(p => p.Profesor))
                 {
                     if (grade.Student?.Id == UserStudId)
                     {
@@ -120,7 +127,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
 
                         // creates textblock containing Grade Data
                         TextBlock GrdCrs = new TextBlock();
-                        GrdCrs.Text = $" Course Name: {grade.Courses.CourseName}\n Grade: {grade.Grade}\n Given by: {grade.Professor.Name}";
+                        GrdCrs.Text = $" Course Name: {grade.Course.CourseName}\n Grade: {grade.Grade}\n Given by: {grade.Course.Profesor.Name}";
                         GrdCrs.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
                         GrdCrs.FontSize = 20;
                         GrdCrs.Padding = new Thickness(5);
@@ -152,7 +159,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
 
                 int? UserStudId = User.Student?.Id;
 
-                var Courses = context.Courses.Include(s => s.Students).Include(p => p.Profesor);
+             /*   var Courses = context.Courses.Include(s => s.Students).Include(p => p.Profesor);
                 int iterator = 0;
 
 
@@ -191,7 +198,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
                         }
                     }
                 }
-
+             */
             }
         }
 

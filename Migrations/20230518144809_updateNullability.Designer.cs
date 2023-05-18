@@ -12,8 +12,8 @@ using StudentManagementSystem.Data;
 namespace StudentManagementSystem.Migrations
 {
     [DbContext(typeof(StudentManagementSystemContext))]
-    [Migration("20230516151739_tablesUpdate")]
-    partial class tablesUpdate
+    [Migration("20230518144809_updateNullability")]
+    partial class updateNullability
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,10 +55,10 @@ namespace StudentManagementSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Grade")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProfessorId")
+                    b.Property<int>("Grade")
                         .HasColumnType("int");
 
                     b.Property<int>("StudentId")
@@ -66,7 +66,7 @@ namespace StudentManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProfessorId");
+                    b.HasIndex("CourseId");
 
                     b.HasIndex("StudentId");
 
@@ -196,7 +196,7 @@ namespace StudentManagementSystem.Migrations
             modelBuilder.Entity("StudentManagementSystem.Models.Courses", b =>
                 {
                     b.HasOne("StudentManagementSystem.Models.Professors", "Profesor")
-                        .WithMany()
+                        .WithMany("Courses")
                         .HasForeignKey("ProfesorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -206,19 +206,19 @@ namespace StudentManagementSystem.Migrations
 
             modelBuilder.Entity("StudentManagementSystem.Models.Grades", b =>
                 {
-                    b.HasOne("StudentManagementSystem.Models.Professors", "Professor")
-                        .WithMany()
-                        .HasForeignKey("ProfessorId")
+                    b.HasOne("StudentManagementSystem.Models.Courses", "Course")
+                        .WithMany("Grades")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("StudentManagementSystem.Models.Students", "Student")
-                        .WithMany()
+                        .WithMany("Grades")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Professor");
+                    b.Navigation("Course");
 
                     b.Navigation("Student");
                 });
@@ -258,7 +258,19 @@ namespace StudentManagementSystem.Migrations
 
             modelBuilder.Entity("StudentManagementSystem.Models.Courses", b =>
                 {
+                    b.Navigation("Grades");
+
                     b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("StudentManagementSystem.Models.Professors", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("StudentManagementSystem.Models.Students", b =>
+                {
+                    b.Navigation("Grades");
                 });
 #pragma warning restore 612, 618
         }

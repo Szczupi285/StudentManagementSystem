@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StudentManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreatev2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,6 +34,7 @@ namespace StudentManagementSystem.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CourseName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProfesorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -96,16 +97,17 @@ namespace StudentManagementSystem.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Grade = table.Column<int>(type: "int", nullable: false),
                     StudentId = table.Column<int>(type: "int", nullable: false),
-                    ProfessorId = table.Column<int>(type: "int", nullable: false)
+                    CourseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Grades", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Grades_Professors_ProfessorId",
-                        column: x => x.ProfessorId,
-                        principalTable: "Professors",
+                        name: "FK_Grades_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -149,9 +151,9 @@ namespace StudentManagementSystem.Migrations
                 column: "ProfesorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Grades_ProfessorId",
+                name: "IX_Grades_CourseId",
                 table: "Grades",
-                column: "ProfessorId");
+                column: "CourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Grades_StudentId",

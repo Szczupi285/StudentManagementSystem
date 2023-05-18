@@ -20,7 +20,7 @@ namespace StudentManagementSystem.Models
 
         public string? PhoneNumber { get; set; }
 
-          
 
+        public ICollection<Courses>? Courses { get; set; }
     }
 }

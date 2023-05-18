@@ -14,6 +14,9 @@ namespace StudentManagementSystem.Models
 
         public Professors Profesor { get; set; } = null!;
 
-        public ICollection<Students> Students { get; set; } = null!;
+        public ICollection<StudentCourses>? StudentCourses { get; set; } 
+
+        public ICollection<Grades>? Grades { get; set; }
+
     }
 }
