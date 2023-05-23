@@ -15,6 +15,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition Height="20"></RowDefinition>
+                <RowDefinition Height="60"></RowDefinition>
                 <RowDefinition Height="auto"></RowDefinition>
             </Grid.RowDefinitions>
 
@@ -38,40 +40,75 @@
             <Button Name="Fullscreen" Grid.Column="2" Content="&#x26F6;" Click="Fullscreen_Click"></Button>
             <Button Name="Close" Grid.Column="3" Content="&#10006;" Click="Close_Click"></Button>
 
-            <Button Name="Schedule" 
+            <Button Name="ViewSchedule" 
                     Grid.Column="0" 
                     Grid.Row="1" 
-                    Content="Schedule" 
+                    Content="View Schedule" 
                     Width="250"
                     FontSize="20" 
                     Foreground="#9AD1D4"
                     Background="Transparent"
-                    Click="Schedule_Click"
+                    Click="ViewSchedule_Click"
                     HorizontalAlignment="Left"></Button>
 
-            <Button Name="Grades" 
+            <Button Name="ViewGrades" 
                     Grid.Column="0" 
                     Grid.Row="1" 
-                    Content="Grades" 
+                    Content="View Grades" 
                     Width="250"
                     FontSize="20" 
                     Foreground="#9AD1D4"
                     Background="Transparent"
-                    Click="Grades_Click"
+                    Click="ViewGrades_Click"
                     HorizontalAlignment="Center"></Button>
+            
 
-            <Button Name="Courses" 
+            <Button Name="ViewCourses" 
                     Grid.Column="0" 
                     Grid.Row="1" 
-                    Content="Courses" 
+                    Content="View Courses" 
                     Width="250"
                     FontSize="20" 
                     Foreground="#9AD1D4"
                     Background="Transparent"
-                    Click="Courses_Click"
+                    Click="ViewCourses_Click"
                     HorizontalAlignment="Right"></Button>
 
-            <ScrollViewer Name ="Info" Grid.Column="0" Grid.Row="2" Height="680"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Button Name="UpdateSchedule" 
+                    Grid.Column="0" 
+                    Grid.Row="3" 
+                    Content="Update Schedule" 
+                    Width="250"
+                    FontSize="20" 
+                    Foreground="#9AD1D4"
+                    Background="Transparent"
+                    Click="UpdateSchedule_Click"
+                    HorizontalAlignment="Left"></Button>
+
+
+            <Button Name="UpdateGrades" 
+                    Grid.Column="0" 
+                    Grid.Row="3" 
+                    Content="Update Grades" 
+                    Width="250"
+                    FontSize="20" 
+                    Foreground="#9AD1D4"
+                    Background="Transparent"
+                    Click="UpdateGrades_Click"
+                    HorizontalAlignment="Center"></Button>
+
+            <Button Name="UpdateCourses" 
+                    Grid.Column="0" 
+                    Grid.Row="3" 
+                    Content="Update Courses" 
+                    Width="250"
+                    FontSize="20" 
+                    Foreground="#9AD1D4"
+                    Background="Transparent"
+                    Click="UpdateCourses_Click"
+                    HorizontalAlignment="Right"></Button>
+
+            <ScrollViewer Name ="Info" Grid.Column="0" Grid.Row="4" Height="600"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <Grid Name="Container" Width="auto"></Grid>
             </ScrollViewer>
 

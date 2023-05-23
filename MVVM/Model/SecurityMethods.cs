@@ -158,6 +158,14 @@ namespace StudentManagementSystem.MVVM.Model
             }
         }
 
+        public static bool IsValidGrade(int grade)
+        {
+            if (grade == 1 || grade == 2 || grade == 3 || grade == 4 || grade == 5 || grade == 6)
+                return true;
+            else
+                return false;
+        }
+
 
         #endregion  
     }
