@@ -233,7 +233,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
             using (var context = new StudentManagementSystemContext())
             {
                 if (StudentLogin.Text is not null && StudentPassword.Password is not null
-                    && StudentName.Text is not null && StudentSurname.Text is not null)
+                    && StudentName.Text is not null && StudentSurname.Text is not null && StudentEmail.Text is not null)
                 {
                     
                     string[] data = SecurityMethods.TrimAll(StudentLogin.Text, StudentPassword.Password, StudentName.Text,

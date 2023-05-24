@@ -35,6 +35,10 @@ namespace StudentManagementSystem.MVVM.ViewModel
 
         private TextBox? InputEndDate;
 
+        private TextBox? CrsNameInput;
+
+        private TextBox? StudEmailInput;
+
 
 
         public ProfessorPanelView(Users user)
@@ -645,10 +649,246 @@ namespace StudentManagementSystem.MVVM.ViewModel
         }
         #endregion
 
+        #region UpdateCourses
         private void UpdateCourses_Click(object sender, RoutedEventArgs e)
         {
+            Container.Children.Clear();
+            
+
+
+            StackPanel stackPanel = new StackPanel();
+            stackPanel.Orientation = Orientation.Horizontal;
+            stackPanel.HorizontalAlignment = HorizontalAlignment.Center;
+            stackPanel.VerticalAlignment = VerticalAlignment.Center;
+
+
+            Button AddCrs = new Button();
+            AddCrs.Content = $"Add Course";
+            AddCrs.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+            AddCrs.FontSize = 20;
+            AddCrs.Height = 200;
+            AddCrs.Width = 400;
+            AddCrs.Margin = new Thickness(30);
+            AddCrs.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+            AddCrs.Click += new RoutedEventHandler(AddCrsView_Click);
+
+            Button AddStud = new Button();
+            AddStud.Content = $"Add students to course";
+            AddStud.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+            AddStud.FontSize = 20;
+            AddStud.Height = 200;
+            AddStud.Width = 400;
+            AddStud.Margin = new Thickness(30);
+            AddStud.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+            AddStud.Click += new RoutedEventHandler(AddStudView_Click);
+
+
+            Frame frameCrs = new Frame();
+            frameCrs.Content = AddStud;
+            frameCrs.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
+            frameCrs.Margin = new Thickness(10);
+            frameCrs.BorderThickness = new Thickness(3);
+
+            Frame frameStud = new Frame();
+            frameStud.Content = AddCrs;
+            frameStud.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
+            frameStud.Margin = new Thickness(10);
+            frameStud.BorderThickness = new Thickness(3);
+
+            stackPanel.Children.Add(frameCrs);
+            stackPanel.Children.Add(frameStud);
+
+            Container.Children.Add(stackPanel);
+        }
+
+
+       
+        public void AddStudView_Click(object sender, RoutedEventArgs e)
+        {
+            
+            int iterator = 0;
+            Container.Children.Clear();
+            // gets the current user professorID
+            var ProfesorId = User.Professor?.Id;
+
+            using (var context = new StudentManagementSystemContext())
+            {
+
+                foreach (var course in context.Courses.Include(p => p.Profesor).Include(sc => sc.StudentCourses)!.ThenInclude(s => s.Student))
+                {
+                    if (course.Profesor.Id == ProfesorId)
+                    {
+                        // created row definition
+                        RowDefinition rowDef = new RowDefinition();
+                        rowDef.Height = new GridLength(1, GridUnitType.Auto);
+                        Container.RowDefinitions.Add(rowDef);
+
+                        StackPanel stackPanel = new StackPanel();
+
+
+
+                        // creates textblock and append the coursename to it only once
+                        TextBlock GrdCrs = new TextBlock();
+                        GrdCrs.Text = $" CourseName: {course.CourseName}";
+                        GrdCrs.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+                        GrdCrs.FontSize = 20;
+
+                        TextBlock StudEmail = new TextBlock();
+                        StudEmail.Text = $"Student E-Mail";
+                        StudEmail.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+                        StudEmail.FontSize = 20;
+                        StudEmail.Width = 200;
+                        StudEmail.Height = 50;
+                        StudEmail.HorizontalAlignment = HorizontalAlignment.Left;
+                        StudEmail.Padding = new Thickness(5);
+
+                        StudEmailInput = new TextBox();
+                        StudEmailInput.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+                        StudEmailInput.Tag = course.Id;
+                        StudEmailInput.FontSize = 20;
+                        StudEmailInput.Height = 60;
+                        StudEmailInput.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+                        StudEmailInput.Width = 300;
+                        StudEmailInput.HorizontalAlignment = HorizontalAlignment.Left;
+                        StudEmailInput.Padding = new Thickness(5);
+
+
+                        Button AddStud = new Button();
+                        AddStud.Content = $"Add Student";
+                        AddStud.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+                        AddStud.FontSize = 20;
+                        AddStud.Height = 60;
+                        AddStud.Width = 300;
+                        AddStud.HorizontalAlignment = HorizontalAlignment.Left;
+                        AddStud.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+                        AddStud.Click += new RoutedEventHandler(AddStud_Click);
+
+                        stackPanel.Children.Add(GrdCrs);
+                        stackPanel.Children.Add(StudEmail);
+                        stackPanel.Children.Add(StudEmailInput);
+                        stackPanel.Children.Add(AddStud);
+
+                        Frame frame = new Frame();
+                        frame.Content = stackPanel;
+                        frame.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
+                        frame.Margin = new Thickness(10);
+                        frame.BorderThickness = new Thickness(3);
+                        
+
+
+
+                        // move frame to next row within the grid 
+                        Grid.SetRow(frame, iterator);
+                        iterator++;
+                        Container.Children.Add(frame);
+                    }
+                }
+
+            }
+        }
+
+        // to do validation checker and expception
+        public void AddStud_Click(object sender, RoutedEventArgs e)
+        {
+            using (var context = new StudentManagementSystemContext())
+            {
+
+                // gets the current user professorID
+                var ProfesorId = User.Professor?.Id;
+                var s = StudEmailInput.Text;
+                var Stud = context.Students.FirstOrDefault(Students => Students.Email == StudEmailInput.Text);
+                if (StudEmailInput is null || StudEmailInput.Text is null || StudEmailInput.Text == String.Empty)
+                    return;
+                else
+                {
+                    var StudCrs = new StudentCourses
+                    {
+                        Course = context.Courses.Find(Convert.ToInt32(StudEmailInput.Tag)),
+                        Student = context.Students.Find(Convert.ToInt32(Stud.Id))!
+                    };
+
+                    StudEmailInput.Text = "";
+                    context.StudentCourses.Add(StudCrs);
+                    context.SaveChanges();
+                }
+
+            }
+        }
+
+
+
+        public void AddCrsView_Click(object sender, RoutedEventArgs e)
+        {
+            Container.Children.Clear();
+            
+            
+
+            TextBlock CrsName = new TextBlock();
+            CrsName.Text = $"Course Name";
+            CrsName.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+            CrsName.FontSize = 20;
+            CrsName.Width = 200;
+            CrsName.Height = 200;
+            CrsName.Margin = new Thickness(30);
+            CrsName.HorizontalAlignment = HorizontalAlignment.Left;
+            CrsName.Padding = new Thickness(5);
+
+            CrsNameInput = new TextBox();
+            CrsNameInput.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+            CrsNameInput.FontSize = 20;
+            CrsNameInput.Height = 60;
+            CrsNameInput.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+            CrsNameInput.Width = 200;
+            CrsNameInput.HorizontalAlignment = HorizontalAlignment.Left;
+            CrsNameInput.Padding = new Thickness(5);
+
+
+            Button AddCrs = new Button();
+            AddCrs.Content = $"Create New Course";
+            AddCrs.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+            AddCrs.FontSize = 20;
+            AddCrs.Height = 150;
+            AddCrs.Width = 300;
+            AddCrs.HorizontalAlignment = HorizontalAlignment.Center;
+            AddCrs.Margin = new Thickness(30);
+            AddCrs.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+            AddCrs.Click += new RoutedEventHandler(AddCrs_Click);
+
+            Container.Children.Add(CrsName);
+            Container.Children.Add(CrsNameInput);
+            Container.Children.Add(AddCrs);
 
         }
+
+        public void AddCrs_Click(object sender, RoutedEventArgs e)
+        {
+            using(var context = new StudentManagementSystemContext())
+            {
+
+                // gets the current user professorID
+                var ProfesorId = User.Professor?.Id;
+
+                if (CrsNameInput is null || CrsNameInput.Text is null || CrsNameInput.Text == String.Empty)
+                    return;
+                else
+                {
+                    var Course_ = new Courses
+                    {
+                        CourseName = CrsNameInput.Text,
+                        Profesor = context.Professors.Find(ProfesorId)!
+                    };
+                    CrsNameInput.Text = "";
+                    context.Courses.Add(Course_);
+                    context.SaveChanges();
+                }
+               
+            }
+        }
+
+
+
+        #endregion
+
         #endregion
     }
 }
