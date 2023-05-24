@@ -6,6 +6,7 @@ using StudentManagementSystem.MVVM.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,6 @@ namespace StudentManagementSystem.MVVM.ViewModel
     {
         private Users User { get; init; }
 
-        private Students? StudentId { get; set; }
         private Courses? CourseId { get; set; }
 
 
@@ -56,7 +56,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
         {
             Application.Current.Shutdown();
         }
-
+        #region View Events
         private void ViewSchedule_Click(object sender, RoutedEventArgs e)
         {
             using(var context = new StudentManagementSystemContext())
@@ -103,10 +103,72 @@ namespace StudentManagementSystem.MVVM.ViewModel
                 }
             }
         }
-
+       
         private void ViewGrades_Click(object sender, RoutedEventArgs e)
         {
+            int iterator = 0;
+            int studentCounter = 1;
+            Container.Children.Clear();
+            // gets the current user professorID
+            var ProfesorId = User.Professor?.Id;
 
+            using (var context = new StudentManagementSystemContext())
+            {
+
+                foreach (var course in context.Courses.Include(g => g.Grades).Include(p => p.Profesor).Include(sc => sc.StudentCourses)!.ThenInclude(s => s.Student))
+                {
+                    if (course.Profesor.Id == ProfesorId)
+                    {
+                        // created row definition
+                        RowDefinition rowDef = new RowDefinition();
+                        rowDef.Height = new GridLength(1, GridUnitType.Auto);
+                        Container.RowDefinitions.Add(rowDef);
+
+                        // creates textblock and append the coursename to it only once
+                        TextBlock GrdCrs = new TextBlock();
+                        GrdCrs.Text = $" CourseName: {course.CourseName}";
+                        GrdCrs.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+                        GrdCrs.FontSize = 20;
+
+                        // gets every student in course and adds them to textblock
+                        foreach (var student in course.StudentCourses!)
+                        {
+                            // appent studentName for every student existing in that course
+                            GrdCrs.Text += $"\n Student {studentCounter}: {student.Student.Name} {student.Student.Surname}";
+                            string tempName = student.Student.Name;
+                            if(course.Grades is not null)
+                            {
+                                GrdCrs.Text += @" {";
+
+                                foreach (var grade in course.Grades)
+                                {
+                                    if(tempName == grade.Student.Name)
+                                        GrdCrs.Text += $" {grade.Grade},";
+                                }
+                                GrdCrs.Text = GrdCrs.Text.TrimEnd(',');
+                                GrdCrs.Text += " ";
+                                GrdCrs.Text += @"}";
+                            }
+                            
+                            studentCounter++;
+                        }
+
+                        studentCounter = 1;
+                        Frame frame = new Frame();
+                        frame.Content = GrdCrs;
+                        frame.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
+                        frame.Margin = new Thickness(10);
+                        frame.BorderThickness = new Thickness(3);
+
+
+                        // move frame to next row within the grid 
+                        Grid.SetRow(frame, iterator);
+                        iterator++;
+                        Container.Children.Add(frame);
+                    }
+                }
+
+            }
         }
 
 
@@ -163,12 +225,12 @@ namespace StudentManagementSystem.MVVM.ViewModel
             }
 
         }
+        #endregion
 
-      
-
+        #region Update Events
         private void UpdateSchedule_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
         
 
@@ -249,7 +311,6 @@ namespace StudentManagementSystem.MVVM.ViewModel
                         // displays every student in different row 
                         foreach (var student in course.StudentCourses!)
                         {
-                            StudentId = student.Student;
                             CourseId = course;
                             TextBlock GrdCrs = new TextBlock();
                             GrdCrs.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
@@ -257,6 +318,8 @@ namespace StudentManagementSystem.MVVM.ViewModel
                             GrdCrs.Margin = new Thickness(10);
 
                             TextBox ChsGrd = new TextBox();
+                            // sets textbox tag to current student id so we can refer later to exact student
+                            ChsGrd.Tag = student.Student.Id;
                             ChsGrd.FontSize = 20;
                             ChsGrd.Width = 50;
                             ChsGrd.Height = 40;
@@ -319,9 +382,15 @@ namespace StudentManagementSystem.MVVM.ViewModel
         {
             Button SendGrade = (Button)sender;
 
-            TextBox textBlock = (TextBox)SendGrade.Tag;
-            int grd = Convert.ToInt32(textBlock.Text);
-            if (textBlock.Text is null || StudentId is null || CourseId is null || !SecurityMethods.IsValidGrade(grd))
+            TextBox ChsGrd = (TextBox)SendGrade.Tag;
+            var CurrentStudentId = ChsGrd.Tag;
+            int grd = 0;
+            if (ChsGrd.Text == String.Empty || ChsGrd.Text is null)
+                return;
+            else
+                grd = Convert.ToInt32(ChsGrd.Text);
+
+            if (CurrentStudentId is null || CourseId is null || !SecurityMethods.IsValidGrade(grd))
                 return;
             else
             {
@@ -332,7 +401,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
                         // student and course use .Find method because we can't insert explicit value for indentity column so we find 
                         // the correct entity in existing db
                         Grade = grd,
-                        Student = context.Students.Find(StudentId.Id)!,
+                        Student = context.Students.Find(CurrentStudentId)!,
                         Course = context.Courses.Find(CourseId.Id)!
 
                     };
@@ -342,7 +411,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
                 
             }
 
-            textBlock.Text = "";
+            ChsGrd.Text = "";
         }
 
         public void ChsGrd_TextChanged(object sender, TextChangedEventArgs e)
@@ -372,5 +441,6 @@ namespace StudentManagementSystem.MVVM.ViewModel
         {
 
         }
+        #endregion
     }
 }
