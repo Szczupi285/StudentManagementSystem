@@ -166,6 +166,30 @@ namespace StudentManagementSystem.MVVM.Model
                 return false;
         }
 
+        public static bool IsValidDate(string date)
+        {
+            var arrDate = date.Split('/');
+
+            int[] intArrDate = Array.ConvertAll(arrDate, int.Parse);
+
+            Regex regex = new Regex(@"^\d{4}/\d{2}/\d{2}/\d{2}/\d{2}$");
+            if (string.IsNullOrWhiteSpace(date) || date == String.Empty || 
+                intArrDate[0] > 9999 || intArrDate[1] > 12 || intArrDate[2] > 31 || intArrDate[3] > 23 || intArrDate[4] > 59 ||
+                intArrDate[0] < 0 || intArrDate[1] < 0 || intArrDate[2] < 0 || intArrDate[3] < 0 || intArrDate[4] < 0)
+                return false;
+            else
+            {
+                return regex.IsMatch(date);
+            }
+        }
+
+        public static bool IsValidDate(DateTime StartDate, DateTime EndDate)
+        {
+            if (StartDate > EndDate || StartDate < DateTime.Now || EndDate < DateTime.Now || StartDate == EndDate)
+                return false;
+            else
+                return true;
+        }
 
         #endregion  
     }

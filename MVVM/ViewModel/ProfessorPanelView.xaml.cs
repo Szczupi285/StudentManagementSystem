@@ -17,6 +17,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace StudentManagementSystem.MVVM.ViewModel
@@ -29,6 +30,10 @@ namespace StudentManagementSystem.MVVM.ViewModel
         private Users User { get; init; }
 
         private Courses? CourseId { get; set; }
+
+        private TextBox? InputStartDate;
+
+        private TextBox? InputEndDate;
 
 
 
@@ -82,7 +87,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
                         TextBlock GrdCrs = new TextBlock();
                         GrdCrs.Text = $" Course Name: {schedule.Course.CourseName}\n " +
                             $"Start date: {schedule.StartDate}\n " +
-                            $"End date {schedule.EndDate}";
+                            $"End date: {schedule.EndDate}";
                         GrdCrs.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
                         GrdCrs.FontSize = 20;
                         GrdCrs.Padding = new Thickness(5);
@@ -228,11 +233,211 @@ namespace StudentManagementSystem.MVVM.ViewModel
         #endregion
 
         #region Update Events
+
+
+
+        #region Update Schedule
         private void UpdateSchedule_Click(object sender, RoutedEventArgs e)
         {
+            int iterator = 0;
+            Container.Children.Clear();
+            // gets the current user professorID
+            var ProfesorId = User.Professor?.Id;
+
+            using (var context = new StudentManagementSystemContext())
+            {
+
+                foreach (var course in context.Courses.Include(p => p.Profesor).Include(sc => sc.StudentCourses)!.ThenInclude(s => s.Student))
+                {
+                    if (course.Profesor.Id == ProfesorId)
+                    {
+                        // created row definition
+                        RowDefinition rowDef = new RowDefinition();
+                        rowDef.Height = new GridLength(1, GridUnitType.Auto);
+                        Container.RowDefinitions.Add(rowDef);
+
+                        // creates textblock and append the coursename to it only once
+                        Button CrsSch = new Button();
+                        CrsSch.Tag = course.Id;
+                        CrsSch.Content = $" CourseName: {course.CourseName}";
+                        CrsSch.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+                        CrsSch.FontSize = 20;
+                        CrsSch.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+                        CrsSch.Click += new RoutedEventHandler(CrsSch_Click);
+
+                        Frame frameSch = new Frame();
+                        frameSch.Content = CrsSch;
+                        frameSch.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
+                        frameSch.Margin = new Thickness(10);
+                        frameSch.BorderThickness = new Thickness(3);
+
+
+                        // move frame to next row within the grid 
+                        Grid.SetRow(frameSch, iterator);
+                        iterator++;
+                        Container.Children.Add(frameSch);
+                    }
+                }
+
+            }
+        }
+
+        public void CrsSch_Click(object sender, RoutedEventArgs e)
+        {
+            Container.Children.Clear();
+
+            Button temp = (Button)sender;
+            var currentCourseId = temp.Tag;
+
+            using(var context = new StudentManagementSystemContext())
+            {
+                RowDefinition rowDef = new RowDefinition();
+                rowDef.Height = new GridLength(1, GridUnitType.Auto);
+                Container.RowDefinitions.Add(rowDef);
+                StackPanel stackPanel = new StackPanel();
+
+                TextBlock GrdCrs = new TextBlock();
+                GrdCrs.Text = $"Start date: \n" +
+                    $"Format: YYYY/MM/DD/hh/mm";
+                GrdCrs.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+                GrdCrs.FontSize = 20;
+                GrdCrs.Padding = new Thickness(5);
+
+                InputStartDate = new TextBox();
+                InputStartDate.MaxLength = 16;
+                InputStartDate.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+                InputStartDate.FontSize = 20;
+                InputStartDate.Width = 250;
+                InputStartDate.HorizontalAlignment = HorizontalAlignment.Left;
+                InputStartDate.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+                InputStartDate.Padding = new Thickness(5);
+
+                TextBlock GrdCrs2 = new TextBlock();
+                GrdCrs2.Text = $"End date: \n" +
+                    $"Format: YYYY/MM/DD/hh/mm";
+                GrdCrs2.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+                GrdCrs2.FontSize = 20;
+                GrdCrs2.Padding = new Thickness(5);
+
+                InputEndDate = new TextBox();
+                InputEndDate.MaxLength = 16;
+                InputEndDate.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+                InputEndDate.FontSize = 20;
+                InputEndDate.Width = 250;
+                InputEndDate.HorizontalAlignment = HorizontalAlignment.Left;
+                InputEndDate.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+                InputEndDate.Padding = new Thickness(5);
+
+                Button AddSch = new Button();
+                AddSch.Tag = currentCourseId;
+                AddSch.Content = $"Add new activities to schedule";
+                AddSch.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
+                AddSch.FontSize = 20;
+                AddSch.Width = 280;
+                Margin = new Thickness(0,10,0,0);
+                AddSch.HorizontalAlignment = HorizontalAlignment.Left;
+                AddSch.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+                AddSch.Click += new RoutedEventHandler(AddSch_Click);
+
+                
+
+
+                stackPanel.Children.Add(GrdCrs);
+                stackPanel.Children.Add(InputStartDate);
+                stackPanel.Children.Add(GrdCrs2);
+                stackPanel.Children.Add(InputEndDate);
+                stackPanel.Children.Add(AddSch);
+
+
+
+                Frame frame = new Frame();
+                frame.Content = stackPanel;
+                frame.BorderBrush = new SolidColorBrush(Color.FromRgb(112, 112, 112));
+                frame.Margin = new Thickness(10);
+                frame.BorderThickness = new Thickness(3);
+
+
+             
+                Container.Children.Add(frame);
+
+                
+
+
+            }
+
+        }
+        // convert input to datetime
+        //security methods 
+
+        public void AddSch_Click(object sender, RoutedEventArgs e)
+        {
+            Button SendSchedule = (Button)sender;
+            InputStartDate!.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+            InputEndDate!.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+
+
+            bool failed = false;
+            var currentCourseId = SendSchedule.Tag;
+            // checks if date is in proper format and is date is null
+            if (InputStartDate is null || !SecurityMethods.IsValidDate(InputStartDate.Text))
+            {
+                InputStartDate!.Background = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0));
+                failed = true;
+            }
+            if (InputEndDate is null || !SecurityMethods.IsValidDate(InputEndDate.Text))
+            {
+                InputEndDate!.Background = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0));
+                failed = true;
+            }
+            if (failed == true)
+                return;
+            
+
+                var StartTempArr = InputStartDate.Text.Split('/');
+                var EndTempArr = InputEndDate.Text.Split('/');
+
+                int[] StartDateArr = Array.ConvertAll(StartTempArr, int.Parse);
+                int[] EndDateArr = Array.ConvertAll(EndTempArr, int.Parse);
+
+                DateTime StartDate1 = new DateTime(StartDateArr[0], StartDateArr[1], StartDateArr[2],
+                    StartDateArr[3], StartDateArr[4], 0);
+
+                DateTime EndDate1 = new DateTime(EndDateArr[0], EndDateArr[1], EndDateArr[2],
+                    EndDateArr[3], EndDateArr[4], 0);
+                // checks if date is not from past and if StartDate > EndDate
+                if(SecurityMethods.IsValidDate(StartDate1, EndDate1))
+                {
+                    using (var context = new StudentManagementSystemContext())
+                    {
+                        var Schedule_ = new Schedule
+                        {
+                            Course = context.Courses.Find(Convert.ToInt32(currentCourseId))!,
+                            StartDate = StartDate1,
+                            EndDate = EndDate1
+                        };
+
+                        context.Schedules.Add(Schedule_);
+                        context.SaveChanges();
+                    }
+                InputStartDate.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+                InputEndDate.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
+                InputStartDate.Text = "";
+                InputEndDate.Text = "";
+                return;
+                }
+                else
+                {
+                    InputStartDate.Background = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0));
+                    InputEndDate.Background = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0));
+                    return;
+                }
+
+                
             
         }
-        
+          
+
+        #endregion
 
         #region Add Grades
         private void UpdateGrades_Click(object sender, RoutedEventArgs e)
@@ -385,8 +590,11 @@ namespace StudentManagementSystem.MVVM.ViewModel
             TextBox ChsGrd = (TextBox)SendGrade.Tag;
             var CurrentStudentId = ChsGrd.Tag;
             int grd = 0;
-            if (ChsGrd.Text == String.Empty || ChsGrd.Text is null)
+            if (ChsGrd.Text == String.Empty || ChsGrd.Text is null || !ChsGrd.Text.All(char.IsNumber))
+            {
+                ChsGrd.Background = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0));
                 return;
+            }
             else
                 grd = Convert.ToInt32(ChsGrd.Text);
 
@@ -418,7 +626,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
         {
             TextBox temp = (TextBox)sender;
 
-            if(temp.Text is not null && temp.Text != String.Empty)
+            if(temp.Text is not null && temp.Text != String.Empty && temp.Text.All(char.IsNumber))
             {
                 if (SecurityMethods.IsValidGrade(Convert.ToInt32(temp.Text.ToString())))
                 {
