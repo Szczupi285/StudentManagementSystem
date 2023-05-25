@@ -37,7 +37,6 @@ namespace StudentManagementSystem.MVVM.ViewModel
 
         private TextBox? CrsNameInput;
 
-        private TextBox? StudEmailInput;
 
 
 
@@ -48,6 +47,13 @@ namespace StudentManagementSystem.MVVM.ViewModel
             this.User = user;
         }
 
+        private void PreviousPage_Click(object sender, RoutedEventArgs e)
+        {
+            LoginView LoginView = new LoginView();
+            this.Close();
+            LoginView.Show();
+        }
+
         private void Minimalize_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
@@ -56,9 +62,15 @@ namespace StudentManagementSystem.MVVM.ViewModel
         private void Fullscreen_Click(object sender, RoutedEventArgs e)
         {
             if (WindowState == WindowState.Maximized)
+            {
                 WindowState = WindowState.Normal;
+                Info.Height = 600;
+            }
             else
+            {
                 WindowState = WindowState.Maximized;
+                Info.Height = 900;
+            }
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -742,9 +754,9 @@ namespace StudentManagementSystem.MVVM.ViewModel
                         StudEmail.HorizontalAlignment = HorizontalAlignment.Left;
                         StudEmail.Padding = new Thickness(5);
 
-                        StudEmailInput = new TextBox();
+                        TextBox StudEmailInput = new TextBox();
                         StudEmailInput.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
-                        StudEmailInput.Tag = course.Id;
+                        StudEmailInput.Tag = course;
                         StudEmailInput.FontSize = 20;
                         StudEmailInput.Height = 60;
                         StudEmailInput.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
@@ -755,6 +767,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
 
                         Button AddStud = new Button();
                         AddStud.Content = $"Add Student";
+                        AddStud.Tag = StudEmailInput;
                         AddStud.Foreground = new SolidColorBrush(Color.FromRgb(154, 209, 212));
                         AddStud.FontSize = 20;
                         AddStud.Height = 60;
@@ -793,23 +806,38 @@ namespace StudentManagementSystem.MVVM.ViewModel
             using (var context = new StudentManagementSystemContext())
             {
 
-                // gets the current user professorID
-                var ProfesorId = User.Professor?.Id;
-                var s = StudEmailInput.Text;
+                Button AddStud = (Button)sender;
+                TextBox StudEmailInput = (TextBox)AddStud.Tag;
+                Courses currentCourse = (Courses)StudEmailInput.Tag;
+                StudEmailInput.Background = new SolidColorBrush(Color.FromRgb(20, 33, 61));
                 var Stud = context.Students.FirstOrDefault(Students => Students.Email == StudEmailInput.Text);
-                if (StudEmailInput is null || StudEmailInput.Text is null || StudEmailInput.Text == String.Empty)
+                if (StudEmailInput.Text == String.Empty || Stud is null)
+                {
+                    StudEmailInput!.Background = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0));
                     return;
+                }
                 else
                 {
-                    var StudCrs = new StudentCourses
+                    // checks if student is already attending course
+                    if (!context.StudentCourses.Any(sc => sc.Student == Stud && sc.Course == currentCourse))
                     {
-                        Course = context.Courses.Find(Convert.ToInt32(StudEmailInput.Tag)),
-                        Student = context.Students.Find(Convert.ToInt32(Stud.Id))!
-                    };
+                        var StudCrs = new StudentCourses
+                        {
+                            Course = context.Courses.Find(Convert.ToInt32(currentCourse.Id))!,
+                            Student = context.Students.Find(Convert.ToInt32(Stud.Id))!
+                        };
 
-                    StudEmailInput.Text = "";
-                    context.StudentCourses.Add(StudCrs);
-                    context.SaveChanges();
+                        StudEmailInput.Text = "";
+                        context.StudentCourses.Add(StudCrs);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        StudEmailInput.Background = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0));
+                        return;
+                    }
+
+
                 }
 
             }

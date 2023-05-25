@@ -100,7 +100,7 @@
                        FontSize="20"
                        >Password</TextBlock>
 
-            <TextBox Name="Password"
+            <PasswordBox Name="Password"
                      Grid.Column="0" 
                      Grid.Row="4" 
                      HorizontalAlignment="Center" 
@@ -114,7 +114,7 @@
                      Height="50"
                      FontSize="20px"
                      VerticalContentAlignment="Center"
-                       ></TextBox>
+                       ></PasswordBox>
 
             <TextBlock Name="LoginPopup"
                        Grid.Column="0" 

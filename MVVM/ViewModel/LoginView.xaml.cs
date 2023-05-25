@@ -55,7 +55,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
         {
             LoginPopup.Visibility = Visibility.Hidden;
 
-            if (Login.Text == String.Empty && Password.Text == String.Empty)
+            if (Login.Text == String.Empty && Password.Password == String.Empty)
             {
                 LoginPopup.Text = "Enter Your login and password";
                 LoginPopup.Visibility = Visibility.Visible;
@@ -64,7 +64,7 @@ namespace StudentManagementSystem.MVVM.ViewModel
             {
                 using (var context = new StudentManagementSystemContext())
                 {
-                    var HashedPassword = SecurityMethods.HashSha256(Password.Text);
+                    var HashedPassword = SecurityMethods.HashSha256(Password.Password);
                     var user = context.Users.Include(x => x.Professor).Include(x => x.Student).FirstOrDefault(Users => Users.Login == Login.Text && Users.Password == HashedPassword);
 
 

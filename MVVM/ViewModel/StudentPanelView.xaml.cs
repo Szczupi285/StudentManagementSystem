@@ -32,6 +32,13 @@ namespace StudentManagementSystem.MVVM.ViewModel
             this.User = user;
         }
 
+        private void PreviousPage_Click(object sender, RoutedEventArgs e)
+        {
+            LoginView LoginView = new LoginView();
+            this.Close();
+            LoginView.Show();
+        }
+
         private void Minimalize_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
@@ -40,9 +47,15 @@ namespace StudentManagementSystem.MVVM.ViewModel
         private void Fullscreen_Click(object sender, RoutedEventArgs e)
         {
             if (WindowState == WindowState.Maximized)
+            {
                 WindowState = WindowState.Normal;
+                Info.Height = 600;
+            }
             else
+            {
                 WindowState = WindowState.Maximized;
+                Info.Height = 900;
+            }
         }
         private void Close_Click(object sender, RoutedEventArgs e)
         {

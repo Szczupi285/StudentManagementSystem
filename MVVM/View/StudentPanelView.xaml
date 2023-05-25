@@ -21,6 +21,7 @@
                 <ColumnDefinition Width="25"></ColumnDefinition>
                 <ColumnDefinition Width="25"></ColumnDefinition>
                 <ColumnDefinition Width="25"></ColumnDefinition>
+                <ColumnDefinition Width="25"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="Management Panel" 
@@ -32,9 +33,10 @@
                        HorizontalAlignment="Center"
             ></TextBlock>
 
-            <Button Name="Minimalize" Grid.Column="1" Content="&#x1F5D5;" Click="Minimalize_Click"></Button>
-            <Button Name="Fullscreen" Grid.Column="2" Content="&#x26F6;" Click="Fullscreen_Click"></Button>
-            <Button Name="Close" Grid.Column="3" Content="&#10006;" Click="Close_Click"></Button>
+            <Button Name="PreviousPage" Grid.Column="1" Content="&#x2190;" Click="PreviousPage_Click"></Button>
+            <Button Name="Minimalize" Grid.Column="2" Content="&#x1F5D5;" Click="Minimalize_Click"></Button>
+            <Button Name="Fullscreen" Grid.Column="3" Content="&#x26F6;" Click="Fullscreen_Click"></Button>
+            <Button Name="Close" Grid.Column="4" Content="&#10006;" Click="Close_Click"></Button>
 
             <Button Name="Schedule" 
                     Grid.Column="0" 
