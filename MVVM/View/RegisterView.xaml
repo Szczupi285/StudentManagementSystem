@@ -262,7 +262,7 @@
                        FontFamily="Georgia" 
                        Foreground="#9AD1D4" 
                        FontSize="20"
-                       >E-Mail*</TextBlock>
+                       >E-Mail</TextBlock>
             
             <TextBox Name="StudentEmail"
                      Grid.Column="0" 

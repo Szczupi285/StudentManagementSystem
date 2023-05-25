@@ -246,14 +246,19 @@ namespace StudentManagementSystem.MVVM.ViewModel
                     var DoesEmailExist = context.Students.FirstOrDefault(Students => Students.Email == data[4]);
                     var DoesLoginExist = context.Users.FirstOrDefault(Users => Users.Login == data[0]);
 
+                   
 
 
                     // validation methods
                     if (SecurityMethods.IsValidLogin(data[0]) && SecurityMethods.IsValidPassword(data[1])
                         && (SecurityMethods.IsValidEmail(data[4]) || data[4].IsNullOrEmpty()) 
                         && (SecurityMethods.IsValidPhoneNumber(data[5]) || data[5].IsNullOrEmpty())
-                        && DoesPhoneNumberExist == null && DoesEmailExist == null && DoesLoginExist == null)
+                        && (DoesPhoneNumberExist == null || DoesPhoneNumberExist.PhoneNumber == "")
+                        && (DoesEmailExist == null || DoesEmailExist.Email == ""))
                     {
+
+                        
+
                         var Student = new Students
                         {
                             Name = data[2],
@@ -338,13 +343,16 @@ namespace StudentManagementSystem.MVVM.ViewModel
                         title = ComboBoxPick.Text;
                     }
 
+                    
+                       
 
 
                     // validation methods
                     if (SecurityMethods.IsValidLogin(data[0]) && SecurityMethods.IsValidPassword(data[1])
                         && (SecurityMethods.IsValidEmail(data[4]) || data[4].IsNullOrEmpty())
                         && (SecurityMethods.IsValidPhoneNumber(data[5]) || data[5].IsNullOrEmpty())
-                        && DoesPhoneNumberExist == null && DoesEmailExist == null && DoesLoginExist == null)
+                        && (DoesPhoneNumberExist == null || DoesPhoneNumberExist.PhoneNumber == "") 
+                        && (DoesEmailExist == null || DoesEmailExist.Email == ""))
                     {
 
                         var Professor = new Professors
